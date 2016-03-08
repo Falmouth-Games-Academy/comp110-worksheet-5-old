@@ -14,7 +14,8 @@ public:
 	int setX(int newX) { return nodeX = newX;  }
 	int setY(int newY) { return nodeX = newY; }
 	
-	double g, h;
+	double g = 0;
+	double h = 0;
 
 private:
 	int nodeX, nodeY;
