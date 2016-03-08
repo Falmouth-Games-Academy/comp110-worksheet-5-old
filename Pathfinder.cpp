@@ -6,7 +6,6 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 	// TODO: implement the A* algorithm to find a path from start to goal
 
 	std::vector<Point> closedSet;
-
 	std::vector<Point> openSet = {start};
 
 
