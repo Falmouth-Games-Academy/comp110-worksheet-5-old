@@ -33,7 +33,7 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 
 	Node startNode(start);
 	Node goalNode(goal);
-	int goalX = start.getY();
+	//startNode.cameFrom = NULL;
 
 	enum neighbourDirections { up, down, left, right, null };  //options for node.cameFrom
 
@@ -61,6 +61,7 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 				currentY = node.getY();
 			}//end if
 		}//End for loop
+
 
 		Point current(currentX, currentY);
 		Node currentNode(current);

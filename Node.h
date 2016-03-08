@@ -17,6 +17,8 @@ public:
 	double g = 0;
 	double h = 0;
 
+	std::string cameFrom;
+
 private:
 	int nodeX, nodeY;
 };
