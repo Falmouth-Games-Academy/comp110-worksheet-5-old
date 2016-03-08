@@ -33,9 +33,10 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 
 	Node startNode(start);
 	Node goalNode(goal);
-	//startNode.cameFrom = NULL;
 
-	enum neighbourDirections { up, down, left, right, null };  //options for node.cameFrom
+	std::vector<std::string> neighbourDirections{ "up", "down", "left", "right" };  //options for node.cameFrom
+	startNode.cameFrom = "none";
+		
 
 	std::vector<Node> closedSet;
 	std::vector<Node> openSet;
@@ -47,36 +48,76 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 
 	while (openSet.size() != 0)
 	{
-		double currentX, currentY, score;
+		double score;
 		double lowestScore = maxDistance;
-		
+		int i = 0;
+
 		for (Node node : openSet)
 		{// Goes though all nodes in openset finds the one with the lowest g + h value
 			score = node.g + node.h;
-
 			if (score < lowestScore)
 			{
 				lowestScore = score;
-				currentX = node.getX();
-				currentY = node.getY();
 			}//end if
 		}//End for loop
 
+		i = 0;
+		for (Node node : openSet)
+		{
+			if ((node.g + node.h) == score)
+			{
+				break;
+			}
+			i++;
+		}
+		
+		Node currentNode = openSet[i];
 
-		Point current(currentX, currentY);
-		Node currentNode(current);
-
-		if (currentNode.getX() == goalNode.getX() && currentNode.getY() == goalNode.getY())
+		if (openSet[i].h == 0)
 		{
 				return reconstructPath(goalNode);
 			
-		}//End  Xif
+		}//End  if
+
+		closedSet.push_back(openSet[i]);
+		openSet.erase(openSet.begin() + i);
+
+
+		//TODO get neighbours & cameFrom working
+		int neighbourX;
+		int neighbourY;
+
+		for (std::string direction : neighbourDirections)
+		{
+			if (direction == "up")
+			{
+				neighbourX = currentNode.getX() + tileSize;
+				neighbourY = currentNode.getY();
+			}
+			else if (direction == "down")
+			{
+				neighbourX = currentNode.getX() - tileSize;
+				neighbourY = currentNode.getY();
+			}
+			else if (direction == "right")
+			{
+				neighbourX = currentNode.getX();
+				neighbourY = currentNode.getY() + tileSize;
+			}
+			else if (direction == "left")
+			{
+				neighbourX = currentNode.getX();
+				neighbourY = currentNode.getY() - tileSize;
+			}
+			
+			Point neighbourPoint(neighbourX, neighbourY);
+			Node neighbourNode(neighbourPoint);
+
+			openSet.push_back(neighbourNode); // add to different vector
+		}
+
 	}//End while 
 
-	//remove currentNode from openset
-	//add current node to closed set
-
-	//for 
 
 		std::vector<Point> result;
 		return result;
