@@ -11,11 +11,9 @@ public:
 	int getX() { return nodeX; }
 	int getY() { return nodeY; }
 
-	int setX(int newX) { nodeX = newX;  }
-	int setY(int newY) { nodeX = newY; }
-
+	int setX(int newX) { return nodeX = newX;  }
+	int setY(int newY) { return nodeX = newY; }
 	
-
 	double g, h;
 
 private:

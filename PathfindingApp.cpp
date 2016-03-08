@@ -45,7 +45,7 @@ PathfindingApp::PathfindingApp()
 
 	// Find the path
 	Pathfinder pathfinder;
-	path = pathfinder.findPath(*map, map->getStartPoint(), map->getEndPoint());
+	path = pathfinder.findPath(*map, map->getStartPoint(), map->getEndPoint(), tileSize);
 }
 
 void PathfindingApp::run()
