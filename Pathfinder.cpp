@@ -29,7 +29,9 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 	//Open Set
 	std::vector<Node> OpenSet;
 
+
 	//OpenSet.push_back(startNode);
+	
 	startNode.g = 0;
 	startNode.h = EuclideanDistance(startNode, endNode);
 
@@ -37,17 +39,46 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 	{
 		double nodeScore;
 		double lowestScore;
+		double maxScore = 100;
+		int i = 0;
 
 
-		for (Node node : OpenSet)
+		for (Node node : OpenSet)  //Loop through all the nodes in OpenSet
 		{
 			nodeScore = node.g + node.h;
-
+			if (nodeScore < maxScore)
+			{
+				lowestScore = nodeScore;
+			}
 		}
 
+		Node currentNode = OpenSet[i];
+
+		//if there is no distance left to travel then reconstruct path
+		if (OpenSet[i].h == 0)
+		{
+			return reconstructPath(endNode);
+		}
+
+		//remove current node from openset
+		//add currentnode to closed set
+		closedSet.push_back(OpenSet[i]);
+		OpenSet.erase(OpenSet.begin() + 1);
 	}
 
 	std::vector<Point> result;
 
 	return result;
+}
+
+std::vector<Point> Pathfinder::reconstructPath(Node endNode)
+{
+	std::vector<Point> path;
+	Node currentNode = endNode;
+
+	while (currentNode != nullptr)
+	{
+		path.push_back(currentNode);
+		currentNode = currentNode.cameFrom;
+	}
 }
