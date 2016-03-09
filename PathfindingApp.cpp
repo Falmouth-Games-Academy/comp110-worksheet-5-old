@@ -7,7 +7,7 @@
 #include "Pathfinder.h"
 
 // Change this to test your pathfinder on different maps
-const char* MAP_NAME = "Maps\\maze.txt";
+const char* MAP_NAME = "Maps\\spiral.txt";
 
 PathfindingApp::PathfindingApp()
 {
