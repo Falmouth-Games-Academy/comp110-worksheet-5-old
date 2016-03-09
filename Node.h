@@ -5,6 +5,8 @@ public:
 	Node();
 	~Node();
 
+	std::string cameFrom;
+
 	double g = 0;
 	double h = 0;
 

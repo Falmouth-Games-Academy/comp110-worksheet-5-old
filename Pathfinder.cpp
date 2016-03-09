@@ -36,7 +36,9 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 	//distance to travel
 	startNode.h = EuclideanDistance(startNode, goalNode);
 
-	//
+	//Came From
+	std::vector<std::string> directions{ "above", "below","left","right" };
+	startNode.cameFrom = "nothing";
 
 	//goes through open set to find smallest g + h
 	while (open.size() > 0);
