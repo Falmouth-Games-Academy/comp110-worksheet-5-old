@@ -31,15 +31,16 @@ std::vector<Point> Pathfinder::reconstructPath(Node goalNode)
 }
 
 std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, const Point& goal, int tileSize)
-{
+{ // main function in Pathfinder.cpp contains a majority of the A* algorithm 
 
 	Node startNode(start);
 	Node goalNode(goal);
 
-	std::vector<std::string> neighbourDirections{ "up", "down", "left", "right" };  //options for Node.cameFrom
+	//options for Node.cameFrom
+	std::vector<std::string> neighbourDirections{ "up", "down", "left", "right" };  
+	// startNode has no cameFrom direction
 	startNode.cameFrom = "none";
 		
-
 	std::vector<Node> closedSet;
 	std::vector<Node> openSet;
 	openSet.push_back(startNode);
@@ -50,12 +51,14 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 
 	while (openSet.size() != 0)
 	{
-		double score; // score will be node.g + node.h
-		double lowestScore = maxDistance;
+		// score will be node.g + node.h
+		double score; 
+		// A number that is larger than the distance between the startNode and goalNode
+		double lowestScore = maxDistance; 
 		
 
 		for (Node node : openSet)
-		{// Goes though all nodes in openset finds the one with the lowest g + h value
+		{// Goes though all nodes in openSet to find the one with the lowest g + h value
 			score = node.g + node.h;
 			if (score < lowestScore)
 			{
@@ -63,7 +66,8 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 			}//end if
 		}//End for loop
 
-		int i = 0; // counter for the for loop
+		// i is used to record what position the required node is at in the openSet
+		int i = 0; 
 		for (Node node : openSet)
 		{
 			if ((node.g + node.h) == score)
@@ -85,10 +89,10 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 		closedSet.push_back(openSet[i]);
 		openSet.erase(openSet.begin() + i);
 
-
-		//TODO get neighbours & cameFrom working
+		// neighbourX and neighbourY are used to calculate the X and Y coordinates of the neighbourNodes
 		int neighbourX;
 		int neighbourY;
+		// neighbourNodes is used to store the neighbourNode
 		std::vector<Node> neighbourNodes;
 
 		for (std::string direction : neighbourDirections)
@@ -125,7 +129,7 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 
 		for (Node neighbourNode : neighbourNodes)
 		{
-			//if node is not wall
+			//TODO: check if node not a wall
 			for (Node i : closedSet)
 			{
 				if (i.getX() != currentNode.getX() && i.getY() != currentNode.getY()) //TODO make function that will compare two node's X & Y values
@@ -138,7 +142,8 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 						{
 							neighbourNode.g = gtentative;
 							neighbourNode.h = EuclideanDistance(neighbourNode, goalNode);
-							//node.cameFrom = currentNode;
+							//neighbourNode.cameFrom = currentNode;
+							//TODO: check if node is in openSet before adding
 							openSet.push_back(neighbourNode);
 						} // End if
 
