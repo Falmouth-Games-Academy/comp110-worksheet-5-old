@@ -7,4 +7,5 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 
 	std::vector<Point> result;
 	return result;
-}
+
+	}
