@@ -10,7 +10,6 @@ double EuclideanDistance(Node currentNode, Node nextNode)
 	double next = nextNode.getX() - nextNode.getY();
 	double distance = sqrt(start + next);
 	return distance;
-
 }
 
 std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, const Point& goal)
@@ -20,7 +19,7 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 	Node startNode(start);
 	Node endNode(goal);
 
-	std::vector<std::string> Walls{ "up", "down", "left", "right" };
+	std::vector<std::string> CheckNeighbour{ "up", "down", "left", "right" };
 	startNode.cameFrom = "NA";
 
 	// Closed Set
@@ -67,7 +66,6 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 	}
 
 	std::vector<Point> result;
-
 	return result;
 }
 
