@@ -170,8 +170,10 @@ void PathfindingApp::showSdlError(const char* title)
 
 int main(int argc, char* args[])
 {
+	//Pathfinder closedSet;
+
 	PathfindingApp app;
 	app.run();
-
+	std::cout << "Hi" << std::endl;
 	return 0;
 }

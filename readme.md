@@ -1,14 +1,11 @@
 # COMP110 Worksheet 5
 
-This is the skeleton project for COMP110 worksheet 5. Please refer to the worksheet, available on LearningSpace, for instructions.
+##Standard Template Library Structures:
+There are a variety of data structures that can be used for this task: vectors, linked lists, sets, maps, queues, priority queues and stacks.
 
-## Building and running
+###Vectors (https://www.sgi.com/tech/stl/Vector.html)
+A vector is a simple container that allows for random access of the elements within the container. This includes the addition and removal of elements at any point. This is useful for my A* pathfinding as I need to be able to remove nodes from the open list to the closed list and also identify if the current node is the target. As this is described as the simplest, as it automatically manages memory, I think I'll use vectors as a base for a data structure for the closedSet.
 
-You should be able to compile the project immediately after checking it out (if not, email Ed). However when you try to run it, you will get error messages about missing DLLs. To fix this, assuming you are building in *Debug* configuration for *Win32*:
-
-* Copy `SDL2.dll` from `SDL2-2.0.4\lib\x86` to `Debug`
-* Copy *all* `*.dll` files from `SDL2_image-2.0.1\lib\x86` to `Debug`
-
-Note that the `Debug` directory will not exist until you have compiled the application for the first time.
-
-For *Release* build, copy the dlls into the `Release` directory. For *x64* (64-bit) builds, copy the dlls from `...\lib\x64` to `x64\Debug` or `x64\Release`.
+##Priority Queue
+Priority queues allow for a top element in the queue to be at the top of the queue, which I can use to reduce the number of checks to find the next node I want to check. 
+I'll use this for the openSet. This big O notationfor this use of priority queue gives a O(n) pull time.
