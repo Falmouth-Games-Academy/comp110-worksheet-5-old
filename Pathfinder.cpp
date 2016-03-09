@@ -6,8 +6,10 @@
 double EuclideanDistance(Node currentNode, Node nextNode) //Change names
 { //Calculates the euclidean distance between two nodes
 
+	//Squares the difference between the values of each node's X and Y values
 	double processX = pow((nextNode.getX() - currentNode.getX()), 2);
 	double processY = pow(nextNode.getY() - currentNode.getY(),2);
+	
 	double distance = sqrt(processX + processY);
 	return distance;
 }
@@ -15,7 +17,7 @@ double EuclideanDistance(Node currentNode, Node nextNode) //Change names
 std::vector<Point> Pathfinder::reconstructPath(Node goalNode)
 {
 	std::vector<Point> path;
-	Node currentNode = goalNode; //Not sure if right
+	Node currentNode = goalNode;
 	Point currentPoint(goalNode.getX(), goalNode.getY());
 	
 
@@ -34,7 +36,7 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 	Node startNode(start);
 	Node goalNode(goal);
 
-	std::vector<std::string> neighbourDirections{ "up", "down", "left", "right" };  //options for node.cameFrom
+	std::vector<std::string> neighbourDirections{ "up", "down", "left", "right" };  //options for Node.cameFrom
 	startNode.cameFrom = "none";
 		
 
@@ -48,9 +50,9 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 
 	while (openSet.size() != 0)
 	{
-		double score;
+		double score; // score will be node.g + node.h
 		double lowestScore = maxDistance;
-		int i = 0;
+		
 
 		for (Node node : openSet)
 		{// Goes though all nodes in openset finds the one with the lowest g + h value
@@ -61,15 +63,15 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 			}//end if
 		}//End for loop
 
-		i = 0;
+		int i = 0; // counter for the for loop
 		for (Node node : openSet)
 		{
 			if ((node.g + node.h) == score)
 			{
 				break;
-			}
+			} //End if
 			i++;
-		}
+		} //End for loop
 		
 		Node currentNode = openSet[i];
 
@@ -79,6 +81,7 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 			
 		}//End  if
 
+		// move node from openSet to closedSet
 		closedSet.push_back(openSet[i]);
 		openSet.erase(openSet.begin() + i);
 
@@ -86,35 +89,66 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 		//TODO get neighbours & cameFrom working
 		int neighbourX;
 		int neighbourY;
+		std::vector<Node> neighbourNodes;
 
 		for (std::string direction : neighbourDirections)
-		{
+		{ // Creates four neighbour nodes around the currentNode
 			if (direction == "up")
 			{
 				neighbourX = currentNode.getX() + tileSize;
 				neighbourY = currentNode.getY();
-			}
+			} // End "up" if
 			else if (direction == "down")
 			{
 				neighbourX = currentNode.getX() - tileSize;
 				neighbourY = currentNode.getY();
-			}
+			} // End "down" if
 			else if (direction == "right")
 			{
 				neighbourX = currentNode.getX();
 				neighbourY = currentNode.getY() + tileSize;
-			}
+			} // End "right" if
 			else if (direction == "left")
 			{
 				neighbourX = currentNode.getX();
 				neighbourY = currentNode.getY() - tileSize;
-			}
+			} // End "left" if
 			
 			Point neighbourPoint(neighbourX, neighbourY);
 			Node neighbourNode(neighbourPoint);
+			neighbourNode.cameFrom = direction;
 
-			openSet.push_back(neighbourNode); // add to different vector
-		}
+			neighbourNodes.push_back(neighbourNode);
+		}// End for directions 
+
+		int gtentative;
+
+		for (Node neighbourNode : neighbourNodes)
+		{
+			//if node is not wall
+			for (Node i : closedSet)
+			{
+				if (i.getX() != currentNode.getX() && i.getY() != currentNode.getY()) //TODO make function that will compare two node's X & Y values
+				{
+					gtentative = currentNode.g + EuclideanDistance(currentNode, neighbourNode);
+
+					for (Node openNode : openSet)
+					{
+						if ((neighbourNode.getX() != openNode.getX() && neighbourNode.getY() != openNode.getY()) || gtentative < neighbourNode.g)
+						{
+							neighbourNode.g = gtentative;
+							neighbourNode.h = EuclideanDistance(neighbourNode, goalNode);
+							//node.cameFrom = currentNode;
+							openSet.push_back(neighbourNode);
+						} // End if
+
+					}// End of for open nodes 
+				}// End of if 
+			}// For i in closedSet
+
+
+		}// End for node
+
 
 	}//End while 
 
