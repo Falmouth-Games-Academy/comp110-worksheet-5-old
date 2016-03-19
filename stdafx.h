@@ -27,3 +27,4 @@
 #include <string>
 #include <map>
 #include <cmath>
+#include <memory>

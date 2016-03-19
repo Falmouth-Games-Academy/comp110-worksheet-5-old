@@ -6,7 +6,10 @@ class Node
 {
 public:
 	Node(Point point);
+	Node(int x, int y);
 	~Node();
+
+	Point nodePoint;
 
 	int getX() { return nodeX; }
 	int getY() { return nodeY; }
@@ -14,12 +17,11 @@ public:
 	int setX(int newX) { return nodeX = newX;  }
 	int setY(int newY) { return nodeX = newY; }
 	
-	double g = 0;
-	double h = 0;
+	double g = 0, h = 0;
 
-	std::string cameFrom;
+	std::shared_ptr<Node> cameFrom;
 
 private:
-	int nodeX, nodeY;
+	int nodeX = 0, nodeY = 0;
 };
 

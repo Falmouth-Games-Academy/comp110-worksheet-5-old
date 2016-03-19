@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Node.h"
+#include "Point.h"
 
 
 Node::Node(Point point)
@@ -9,6 +10,15 @@ Node::Node(Point point)
 	int newY = point.getY();
 	setX(newX);
 	setY(newY);
+	nodePoint = point;
+}
+
+Node::Node(int x, int y)
+{
+	setX(x);
+	setY(y);
+	Point point(x, y);
+	nodePoint = point;
 }
 
 
