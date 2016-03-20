@@ -13,8 +13,16 @@ double Pathfinder::euclideanDistance(const Point& a, const Point& b)
 
 std::vector<Point> Pathfinder::reconstructPath(std::shared_ptr<Node> goalNode)
 {
-	std::vector<Point> result;
-	return result;
+	std::vector<Point> path;
+
+	auto currentNode = goalNode;
+	while (currentNode)
+	{
+		path.emplace(path.begin(), currentNode->nodePoint);
+		currentNode = currentNode->cameFrom;
+	}
+	
+	return path;
 }
 
 
@@ -27,6 +35,11 @@ std::shared_ptr<Node> Pathfinder::getNode(int x, int y)
 		nodes[x][y] = node;
 	}
 	return node;
+}
+
+std::shared_ptr<Node> Pathfinder::getNode(Point point)
+{
+	return getNode(point.getX(), point.getY());
 }
 
 std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbours(std::shared_ptr<Node> node)
@@ -79,19 +92,6 @@ void Pathfinder::removeOpenSetNode(std::shared_ptr<Node> node)
 	}
 }
 
-void Pathfinder::updateOpenSet()
-{
-	std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, CompareNodeScore>  updatedOpenSet;
-	while (!openSet.empty())
-	{
-		std::shared_ptr<Node> node = openSet.top();
-		updatedOpenSet.push(node);
-		openSet.pop();
-	}
-
-	openSet = updatedOpenSet;
-}
-
 std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, const Point& goal)
 {
 	// Initialise vector to the size of the map and each element to nullptr
@@ -101,10 +101,10 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 		nodes.push_back(std::vector<std::shared_ptr<Node>>(map.getHeight(), nullptr));
 	}
 
-	std::shared_ptr<Node> goalNode = std::make_shared<Node>(goal);
+	std::shared_ptr<Node> goalNode = getNode(goal);
 
 	// Add the start node to the open set
-	std::shared_ptr<Node> startNode = std::make_shared<Node>(start);
+	std::shared_ptr<Node> startNode = getNode(start);
 	openSet.push(startNode);
 	startNode->g = 0;
 	startNode->h = euclideanDistance(startNode->nodePoint, goalNode->nodePoint);
@@ -115,6 +115,11 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 	while (!openSet.empty())
 	{
 		currentNode = openSet.top();
+		if (currentNode->getX() == 13 & currentNode->getY() == 1)
+		{
+			int u = 9;
+		}
+
 		if (currentNode == goalNode)
 		{
 			return reconstructPath(goalNode);
@@ -145,9 +150,7 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 		}
 	}
 
-
-	std::vector<Point> result;
-	return result;
+	throw PathfinderError();
 }
 
 

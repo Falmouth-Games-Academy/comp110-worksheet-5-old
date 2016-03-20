@@ -21,11 +21,16 @@ public:
 
 	std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, CompareNodeScore> openSet;
 
+
 private:
 	std::vector<Point> reconstructPath(std::shared_ptr<Node> goalNode);
 	std::shared_ptr<Node> getNode(int x, int y);
+	std::shared_ptr<Node> getNode(Point point);
 	std::vector<std::shared_ptr<Node>> getNeighbours(std::shared_ptr<Node> node);
 	bool isInOpenSet(std::shared_ptr<Node> node);
-	void updateOpenSet();
 	void removeOpenSetNode(std::shared_ptr<Node> node);
+};
+
+class PathfinderError : public std::exception
+{
 };

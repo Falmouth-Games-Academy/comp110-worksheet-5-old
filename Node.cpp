@@ -17,5 +17,3 @@ Node::Node(int x, int y)
 Node::~Node()
 {
 }
-
-
