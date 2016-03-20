@@ -5,7 +5,11 @@ class Node
 {
 public:
 	Node(const Point& point);
+	Node(int x, int y);
 	~Node();
+
+	int getX() { return nodePoint.getX(); }
+	int getY() { return nodePoint.getY(); }
 
 	Point nodePoint;
 	double g = 0, h = 0;

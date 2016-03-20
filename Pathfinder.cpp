@@ -17,6 +17,30 @@ std::vector<Point> Pathfinder::reconstructPath(std::shared_ptr<Node> goalNode)
 	return result;
 }
 
+
+std::shared_ptr<Node> Pathfinder::getNode(int x, int y)
+{
+	std::shared_ptr<Node> node = nodes[x][y];
+	if (!node)
+	{
+		node = std::make_shared<Node>(x, y);
+		nodes[x][y] = node;
+	}
+	return node;
+}
+
+std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbours(std::shared_ptr<Node> node)
+{
+	std::vector<std::shared_ptr<Node>> neighbours;
+	neighbours.push_back(getNode(node->getX() - 1, node->getY()));
+	neighbours.push_back(getNode(node->getX() + 1, node->getY()));
+	neighbours.push_back(getNode(node->getX(), node->getY() + 1));
+	neighbours.push_back(getNode(node->getX(), node->getY() - 1));
+
+	return neighbours;
+}
+
+
 std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, const Point& goal)
 {
 	// Initialise vector to the size of the map and each element to nullptr
@@ -47,6 +71,11 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 
 		currentNode->closed = true;
 		openSet.pop();
+
+		for each (std::shared_ptr<Node> neighbourNode in getNeighbours(currentNode))
+		{
+
+		}
 	}
 
 

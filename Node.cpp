@@ -8,6 +8,14 @@ Node::Node(const Point& point)
 }
 
 
+Node::Node(int x, int y)
+	: nodePoint(Point(x, y))
+{
+}
+
+
 Node::~Node()
 {
 }
+
+
