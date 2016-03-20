@@ -40,6 +40,57 @@ std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbours(std::shared_ptr<Nod
 	return neighbours;
 }
 
+bool Pathfinder::isInOpenSet(std::shared_ptr<Node> node)
+{
+	std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, CompareNodeScore> openSetTemp = openSet;
+	while (!openSetTemp.empty())
+	{
+		if (openSetTemp.top() == node)
+		{
+			return true;
+		}
+
+		openSetTemp.pop();
+	}
+
+	return false;
+}
+
+void Pathfinder::removeOpenSetNode(std::shared_ptr<Node> node)
+{
+	std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, CompareNodeScore> openSetTemp = openSet;
+
+	while (isInOpenSet(node))
+	{
+		openSetTemp.push(openSet.top());
+		openSet.pop();
+	}
+	while (!openSetTemp.empty())
+	{
+		if (node != openSetTemp.top())
+		{
+			openSet.push(openSetTemp.top());
+			openSetTemp.pop();
+		}
+		else
+		{
+			openSetTemp.pop();
+		}
+	}
+}
+
+void Pathfinder::updateOpenSet()
+{
+	std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, CompareNodeScore>  updatedOpenSet;
+	while (!openSet.empty())
+	{
+		std::shared_ptr<Node> node = openSet.top();
+		updatedOpenSet.push(node);
+		openSet.pop();
+	}
+
+	openSet = updatedOpenSet;
+}
 
 std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, const Point& goal)
 {
@@ -74,14 +125,29 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 
 		for each (std::shared_ptr<Node> neighbourNode in getNeighbours(currentNode))
 		{
+			if (!map.isWall(neighbourNode->getX(), neighbourNode->getY()) && !neighbourNode->closed)
+			{
+				int gTentative = currentNode->g + euclideanDistance(currentNode->nodePoint, neighbourNode->nodePoint);
 
+				if (!isInOpenSet(neighbourNode) || gTentative < neighbourNode->g)
+				{
+					if (isInOpenSet(neighbourNode))
+					{
+						removeOpenSetNode(neighbourNode);
+					}
+					
+					neighbourNode->g = gTentative;
+					neighbourNode->h = euclideanDistance(neighbourNode->nodePoint, goalNode->nodePoint);
+					neighbourNode->cameFrom = currentNode;
+					openSet.push(neighbourNode);
+				}
+			}
 		}
 	}
 
 
 	std::vector<Point> result;
 	return result;
-	
 }
 
 

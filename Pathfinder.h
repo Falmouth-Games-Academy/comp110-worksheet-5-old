@@ -25,4 +25,7 @@ private:
 	std::vector<Point> reconstructPath(std::shared_ptr<Node> goalNode);
 	std::shared_ptr<Node> getNode(int x, int y);
 	std::vector<std::shared_ptr<Node>> getNeighbours(std::shared_ptr<Node> node);
+	bool isInOpenSet(std::shared_ptr<Node> node);
+	void updateOpenSet();
+	void removeOpenSetNode(std::shared_ptr<Node> node);
 };
