@@ -53,11 +53,15 @@ std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbours(std::shared_ptr<Nod
 	return neighbours;
 }
 
+
 bool Pathfinder::isInOpenSet(std::shared_ptr<Node> node)
 {
+	// Make a copy of the openSet
 	std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, CompareNodeScore> openSetTemp = openSet;
+
 	while (!openSetTemp.empty())
 	{
+		// Return true if the top one matches, otherwise it gets removed
 		if (openSetTemp.top() == node)
 		{
 			return true;
@@ -69,17 +73,22 @@ bool Pathfinder::isInOpenSet(std::shared_ptr<Node> node)
 	return false;
 }
 
+
+// This is for removing a node from the priority queue before its g or h changes
 void Pathfinder::removeOpenSetNode(std::shared_ptr<Node> node)
 {
 	std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, CompareNodeScore> openSetTemp = openSet;
 
 	while (isInOpenSet(node))
 	{
+		// Remove elements from openSet and add them to temporary set until the specified node is removed
 		openSetTemp.push(openSet.top());
 		openSet.pop();
 	}
+
 	while (!openSetTemp.empty())
 	{
+		// Put all of the nodes back into openSet except for the specified node
 		if (node != openSetTemp.top())
 		{
 			openSet.push(openSetTemp.top());
@@ -92,6 +101,7 @@ void Pathfinder::removeOpenSetNode(std::shared_ptr<Node> node)
 	}
 }
 
+
 std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, const Point& goal)
 {
 	// Initialise vector to the size of the map and each element to nullptr
@@ -102,29 +112,27 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 	}
 
 	std::shared_ptr<Node> goalNode = getNode(goal);
-
-	// Add the start node to the open set
 	std::shared_ptr<Node> startNode = getNode(start);
-	openSet.push(startNode);
 	startNode->g = 0;
 	startNode->h = euclideanDistance(startNode->nodePoint, goalNode->nodePoint);
 	startNode->cameFrom = nullptr;
+	// Add the start node to the open set
+	openSet.push(startNode);
 
 	std::shared_ptr<Node> currentNode;
 
 	while (!openSet.empty())
 	{
+		// The node with the lowest g+h score
 		currentNode = openSet.top();
-		if (currentNode->getX() == 13 & currentNode->getY() == 1)
-		{
-			int u = 9;
-		}
 
 		if (currentNode == goalNode)
 		{
+			// A path to the goal has been found
 			return reconstructPath(goalNode);
 		}
 
+		// Add current node to closed set and remove from open set
 		currentNode->closed = true;
 		openSet.pop();
 
@@ -132,10 +140,12 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 		{
 			if (!map.isWall(neighbourNode->getX(), neighbourNode->getY()) && !neighbourNode->closed)
 			{
+				// Current g plus the distance fr5om this node to the neighbour
 				int gTentative = currentNode->g + euclideanDistance(currentNode->nodePoint, neighbourNode->nodePoint);
 
 				if (!isInOpenSet(neighbourNode) || gTentative < neighbourNode->g)
 				{
+					// Remove from priority queue before g+h score changes
 					if (isInOpenSet(neighbourNode))
 					{
 						removeOpenSetNode(neighbourNode);
@@ -144,12 +154,15 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 					neighbourNode->g = gTentative;
 					neighbourNode->h = euclideanDistance(neighbourNode->nodePoint, goalNode->nodePoint);
 					neighbourNode->cameFrom = currentNode;
+
+					// Add node into (or back into) the priority queue
 					openSet.push(neighbourNode);
 				}
 			}
 		}
 	}
 
+	// If it gets here, a path was not found
 	throw PathfinderError();
 }
 
