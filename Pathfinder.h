@@ -9,6 +9,7 @@ public:
 	std::vector<Point> findPath(const Map& map, const Point& start, const Point& goal, int tileSize);
 	std::vector<std::shared_ptr<Node>> neighbourNodes;
 	std::vector<Point> Pathfinder::reconstructPath(std::shared_ptr<Node> goalNode);
+	std::shared_ptr<Node> createNode(Point point);
 
 	int maxDistance = 100;
 
