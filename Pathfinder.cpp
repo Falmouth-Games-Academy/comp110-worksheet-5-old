@@ -24,10 +24,17 @@ std::shared_ptr<Node> Pathfinder::createNode(int x, int y)
 std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbourNodes(std::shared_ptr<Node> currentNode)
 {// Creates a vecotr of four nodes surrounding the current node
 	std::vector<std::shared_ptr<Node>> neighbourNodes;
-	neighbourNodes.push_back(std::make_shared<Node>(currentNode->getX(), currentNode->getY()));
-
+	neighbourNodes.push_back(std::make_shared<Node>(currentNode->getX(), currentNode->getY()+1));  //up node
+	neighbourNodes.push_back(std::make_shared<Node>(currentNode->getX(), currentNode->getY()-1));  //down node
+	neighbourNodes.push_back(std::make_shared<Node>(currentNode->getX()-1, currentNode->getY()));  //left node
+	neighbourNodes.push_back(std::make_shared<Node>(currentNode->getX()+1, currentNode->getY()));  //right node
+	return neighbourNodes;
 }
 
+bool Pathfinder::checkForNodeInVector(std::shared_ptr<Node> node, std::vector<std::shared_ptr<Node>> nodeSet)
+{//Checks a vector to see if the given node is in it
+
+}
 
 std::vector<Point> Pathfinder::reconstructPath(std::shared_ptr<Node> goalNode)
 {
@@ -99,42 +106,17 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 		closedSet.push_back(openSet[i]);
 		openSet.erase(openSet.begin() + i);
 
-		std::vector<std::shared_ptr<Node>> neighbourNodes;
-
-		//// TODO : GET NEIGHBOUR NODES /////
-
+		auto neighbourNodes = getNeighbourNodes(currentNode);  //Creates a list of neighbour nodes 
+		
+		double gtentative;
+		
+		for (std::shared_ptr<Node> node : neighbourNodes)
+		{
 		
 
-		//double gtentative;
-		/*
-		for (std::shared_ptr<Node> neighbourNode : neighbourNodes)
-		{
-		//TODO: check if node not a wall
-		for (std::shared_ptr<Node> i : closedSet)
-		{
-		if (i->getX() != currentNode->getX() && i->getY() != currentNode->getY()) //TODO make function that will compare two node's X & Y values
-		{
-		gtentative = currentNode->g + EuclideanDistance(currentNode, neighbourNode);
+		}// End of for node in neighbourNodes
 
-		for (std::shared_ptr<Node> openNode : openSet)
-		{
-		if ((neighbourNode->getX() != openNode->getX() && neighbourNode->getY() != openNode->getY()) || gtentative < neighbourNode->g)
-		{
-		neighbourNode->g = gtentative;
-		neighbourNode->h = EuclideanDistance(neighbourNode, goalNode);
-		//neighbourNode->cameFrom = currentNode;
-		//TODO: check if node is in openSet before adding
-		openSet.push_back(neighbourNode);
-		} // End if
-
-		}// End of for open nodes
-		}// End of if
-		}// For i in closedSet
-
-
-		}// End for node
-
-		*/
+		
 	}//End while 
 	
 

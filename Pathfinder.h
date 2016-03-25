@@ -12,7 +12,8 @@ public:
 	
 	std::shared_ptr<Node> createNode(int x, int y);
 	std::vector<std::shared_ptr<Node>> getNeighbourNodes(std::shared_ptr<Node> currentNode);
+	bool checkForNodeInVector(std::shared_ptr<Node> node, std::vector<std::shared_ptr<Node>> nodeSet);
 
-	int maxDistance = 100;
+	int maxDistance = 1000;
 
 };
