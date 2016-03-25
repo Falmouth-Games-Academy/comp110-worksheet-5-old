@@ -23,7 +23,8 @@ std::shared_ptr<Node> Pathfinder::createNode(int x, int y)
 
 std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbourNodes(std::shared_ptr<Node> currentNode)
 {// Creates a vecotr of four nodes surrounding the current node
-	
+	std::vector<std::shared_ptr<Node>> neighbourNodes;
+	neighbourNodes.push_back(std::make_shared<Node>(currentNode->getX(), currentNode->getY()));
 
 }
 
