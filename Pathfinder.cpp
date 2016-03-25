@@ -3,7 +3,7 @@
 #include "Node.h"
 #include "Point.h"
 
-double EuclideanDistance(std::shared_ptr<Node> currentNode, std::shared_ptr<Node> nextNode) //Change names
+double euclideanDistance(std::shared_ptr<Node> currentNode, std::shared_ptr<Node> nextNode) //Change names
 { //Calculates the euclidean distance between two nodes
 
   //Squares the difference between the values of each node's X and Y values
@@ -33,12 +33,17 @@ std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbourNodes(std::shared_ptr
 
 bool Pathfinder::checkForNodeInVector(std::shared_ptr<Node> node, std::vector<std::shared_ptr<Node>> nodeSet)
 {//Checks a vector to see if the given node is in it
-
+	for (std::shared_ptr<Node> i : nodeSet)
+	{
+		if (i->getX() == node->getX() && i->getY() == node->getY())
+		return true;
+	}//end for i
+	return false;
 }
 
 std::vector<Point> Pathfinder::reconstructPath(std::shared_ptr<Node> goalNode)
 {
-	std::vector<Point> path;
+	/*
 	std::shared_ptr<Node> currentNode = goalNode;
 
 	while (currentNode->cameFrom != nullptr)
@@ -46,6 +51,13 @@ std::vector<Point> Pathfinder::reconstructPath(std::shared_ptr<Node> goalNode)
 	path.push_back(currentNode->nodePoint);
 	currentNode = currentNode->cameFrom;
 	}//End while 
+; */
+
+	std::vector<Point> path;
+	for (auto currentNode = goalNode; currentNode; currentNode = currentNode->cameFrom)
+	{
+		path.insert(path.begin(), currentNode->nodePoint);
+	}
 
 	return path;
 } 
@@ -55,23 +67,20 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 
 	auto startNode = createNode(start.getX(), start.getY());
 	auto goalNode = createNode(goal.getX(), goal.getY());
-
+	
+	startNode->g = 0;
+	startNode->h = euclideanDistance(startNode, goalNode);
 	startNode->cameFrom = nullptr;
 
 	std::vector<std::shared_ptr<Node>> closedSet;
 	std::vector<std::shared_ptr<Node>> openSet;
 	openSet.push_back(startNode);
-
-	startNode->g = 0;
-	startNode->h = EuclideanDistance(startNode, goalNode);
-
-	
+		
 	while (openSet.size() != 0)
 	{
-		// score will be node.g + node.h
-		double score;
-		// A number that is larger than the distance between the startNode and goalNode
-		double lowestScore = maxDistance;
+		
+		double score; // score will be node.g + node.h
+		double lowestScore = maxDistance; // A number that is larger than the distance between the startNode and goalNode 
 
 		
 		for (std::shared_ptr<Node> node : openSet)
@@ -86,7 +95,7 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 		 // i is used to record what position the required node is at in the openSet
 		int i = 0;
 		for (std::shared_ptr<Node> node : openSet)
-		{
+		{// Finds the position of the node with the lowest score in the openSet
 			if ((node->g + node->h) == score)
 			{
 				break;
@@ -109,9 +118,28 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 		auto neighbourNodes = getNeighbourNodes(currentNode);  //Creates a list of neighbour nodes 
 		
 		double gtentative;
-		
+		bool inClosedSet;
+		bool inOpenSet;
+
 		for (std::shared_ptr<Node> node : neighbourNodes)
 		{
+			inClosedSet = checkForNodeInVector(node, closedSet);
+			//if (inClosedSet == false && map.isWall(node->nodePoint.getX(), node->nodePoint.getY()))
+			if (!map.isWall(node->nodePoint.getX(), node->nodePoint.getY())
+				&& !inClosedSet)
+			{
+				gtentative = currentNode->g + euclideanDistance(currentNode, node);
+				inOpenSet = checkForNodeInVector(node, openSet);
+
+				if (inOpenSet == false || gtentative < node->g)
+				{
+					node->g = gtentative;
+					node->h = euclideanDistance(node, goalNode);
+					node->cameFrom = currentNode;
+					openSet.push_back(node);
+				}//End if
+
+			}//End if
 		
 
 		}// End of for node in neighbourNodes
