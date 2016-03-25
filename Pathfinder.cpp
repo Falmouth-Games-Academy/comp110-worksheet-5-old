@@ -14,6 +14,19 @@ double EuclideanDistance(std::shared_ptr<Node> currentNode, std::shared_ptr<Node
 	return distance;
 }
 
+std::shared_ptr<Node> Pathfinder::createNode(int x, int y)
+{
+	auto node = std::make_shared<Node>(x, y);
+	return node;
+}
+
+
+std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbourNodes(std::shared_ptr<Node> currentNode)
+{// Creates a vecotr of four nodes surrounding the current node
+	
+
+}
+
 
 std::vector<Point> Pathfinder::reconstructPath(std::shared_ptr<Node> goalNode)
 {
@@ -29,18 +42,11 @@ std::vector<Point> Pathfinder::reconstructPath(std::shared_ptr<Node> goalNode)
 	return path;
 } 
 
-std::shared_ptr<Node> Pathfinder::createNode(Point point)
-{
-	auto node = std::make_shared<Node>(point);
-	return node;
-}
-
 std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, const Point& goal, int tileSize)
 { // main function in Pathfinder.cpp contains a majority of the A* algorithm 
 
-		
-	auto startNode = createNode(start);
-	auto goalNode = createNode(goal);
+	auto startNode = createNode(start.getX(), start.getY());
+	auto goalNode = createNode(goal.getX(), goal.getY());
 
 	startNode->cameFrom = nullptr;
 
