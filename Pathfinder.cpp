@@ -47,8 +47,6 @@ std::vector<Point> Pathfinder::reconstructPath(std::shared_ptr<Node> goalNode)
 	
 	for (auto currentNode = goalNode; currentNode; currentNode = currentNode->cameFrom)
 	{
-		int testv = currentNode->nodePoint.getX();  //TEST LINE
-		int test2 = currentNode->getX(); //TEST LINE
 		path.insert(path.begin(), currentNode->nodePoint);
 	}
 
@@ -89,7 +87,7 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 		int i = 0;
 		for (std::shared_ptr<Node> node : openSet)
 		{// Finds the position of the node with the lowest score in the openSet
-			if ((node->g + node->h) == score)
+			if ((node->g + node->h) == lowestScore)
 			{
 				break;
 			} //End if
@@ -100,7 +98,7 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 
 		if (openSet[i]->h == 0)
 		{
-			return reconstructPath(goalNode);
+			return reconstructPath(openSet[i]);
 
 		}//End  if
 
@@ -116,12 +114,12 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 
 		for (std::shared_ptr<Node> node : neighbourNodes)
 		{
-			inClosedSet = checkForNodeInVector(node, closedSet);
-			bool nodeIsWall = map.isWall(node->nodePoint.getX(), node->nodePoint.getY());
+			inClosedSet = checkForNodeInVector(node, closedSet); // Checks to see if the node is in the closed set
+			bool nodeIsWall = map.isWall(node->nodePoint.getX(), node->nodePoint.getY()); //Checks if the node is a walll
 			if (inClosedSet == false && nodeIsWall == false)
 			{
 				gtentative = currentNode->g + euclideanDistance(currentNode, node);
-				inOpenSet = checkForNodeInVector(node, openSet);
+				inOpenSet = checkForNodeInVector(node, openSet);  //Checks to see if node is in openset
 
 				if (inOpenSet == false || gtentative < node->g)
 				{
@@ -141,6 +139,6 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 	
 
 	std::vector<Point> result;
-	return result;
+	return result; //If no path is found return an empty path
 
 }
