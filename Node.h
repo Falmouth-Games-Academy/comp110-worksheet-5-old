@@ -15,7 +15,7 @@ public:
 	int getY() { return nodeY; }
 
 	int setX(int newX) { return nodeX = newX;  }
-	int setY(int newY) { return nodeX = newY; }
+	int setY(int newY) { return nodeY = newY; }
 	
 	double g = 0, h = 0;
 

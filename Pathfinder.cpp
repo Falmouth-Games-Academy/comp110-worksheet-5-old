@@ -3,11 +3,11 @@
 #include "Node.h"
 #include "Point.h"
 
-double euclideanDistance(std::shared_ptr<Node> currentNode, std::shared_ptr<Node> nextNode) //Change names
+double euclideanDistance(std::shared_ptr<Node> currentNode, std::shared_ptr<Node> nextNode)
 { //Calculates the euclidean distance between two nodes
 
   //Squares the difference between the values of each node's X and Y values
-	double processX = pow((nextNode->getX() - currentNode->getX()), 2);
+	double processX = pow(nextNode->getX() - currentNode->getX(), 2);
 	double processY = pow(nextNode->getY() - currentNode->getY(), 2);
 
 	double distance = sqrt(processX + processY);
@@ -43,19 +43,12 @@ bool Pathfinder::checkForNodeInVector(std::shared_ptr<Node> node, std::vector<st
 
 std::vector<Point> Pathfinder::reconstructPath(std::shared_ptr<Node> goalNode)
 {
-	/*
-	std::shared_ptr<Node> currentNode = goalNode;
-
-	while (currentNode->cameFrom != nullptr)
-	{
-	path.push_back(currentNode->nodePoint);
-	currentNode = currentNode->cameFrom;
-	}//End while 
-; */
-
 	std::vector<Point> path;
+	
 	for (auto currentNode = goalNode; currentNode; currentNode = currentNode->cameFrom)
 	{
+		int testv = currentNode->nodePoint.getX();  //TEST LINE
+		int test2 = currentNode->getX(); //TEST LINE
 		path.insert(path.begin(), currentNode->nodePoint);
 	}
 
@@ -66,7 +59,7 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 { // main function in Pathfinder.cpp contains a majority of the A* algorithm 
 
 	auto startNode = createNode(start.getX(), start.getY());
-	auto goalNode = createNode(goal.getX(), goal.getY());
+	auto goalNode = createNode(goal.getX(), goal.getY()); 
 	
 	startNode->g = 0;
 	startNode->h = euclideanDistance(startNode, goalNode);
@@ -103,7 +96,7 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 			i++;
 		} //End for loop
 
-		std::shared_ptr<Node> currentNode = openSet[i];
+		auto currentNode = openSet[i];
 
 		if (openSet[i]->h == 0)
 		{
@@ -124,9 +117,8 @@ std::vector<Point> Pathfinder::findPath(const Map& map, const Point& start, cons
 		for (std::shared_ptr<Node> node : neighbourNodes)
 		{
 			inClosedSet = checkForNodeInVector(node, closedSet);
-			//if (inClosedSet == false && map.isWall(node->nodePoint.getX(), node->nodePoint.getY()))
-			if (!map.isWall(node->nodePoint.getX(), node->nodePoint.getY())
-				&& !inClosedSet)
+			bool nodeIsWall = map.isWall(node->nodePoint.getX(), node->nodePoint.getY());
+			if (inClosedSet == false && nodeIsWall == false)
 			{
 				gtentative = currentNode->g + euclideanDistance(currentNode, node);
 				inOpenSet = checkForNodeInVector(node, openSet);

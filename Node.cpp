@@ -10,7 +10,7 @@ Node::Node(Point point)
 	int newY = point.getY();
 	setX(newX);
 	setY(newY);
-	nodePoint = point;
+	Point nodePoint = point;
 }
 
 Node::Node(int x, int y)
